@@ -20,6 +20,9 @@ api.set('view engine', 'ejs');
 
 console.log(`${APP_DOMAIN}/app`);
 bot.start(async (ctx) => {
+    if(!users.includes(ctx.from.id)){
+        users.push(ctx.from.id);
+    }
     await ctx.sendPhoto(`${APP_DOMAIN}/image/photo.jpg`, {
         caption : `
         سلام <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a> عزیز
@@ -41,14 +44,13 @@ bot.start(async (ctx) => {
         }
     });
     await ctx.sendMessage('HabibCoin Ft. SafarCoin Comming soon...');
-    if(users.indexOf(ctx.from.id) !== -1) users.push(ctx.from.id);
 });
 bot.command('send', async (ctx) => {
     if(ctx.from.id == 6216020974 || ctx.from.id == 931255100){
         const msg = ctx.message.text.split('/send')[1];
-        users.forEach(async (usrID : number) => {
+        for(let usrID of users){
             await bot.telegram.sendMessage(usrID, msg);
-        });
+        }
 
         await ctx.sendMessage('پیام به همه ی کاربران ارسال شد✅');
     }
